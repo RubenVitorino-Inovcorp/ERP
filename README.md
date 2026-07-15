@@ -67,4 +67,4 @@ npm run dev
 php artisan queue:listen
 ```
 
-*Nota: Se a aplicação for executada através do Laravel Herd, o servidor web e o PHP já são geridos automaticamente. Basta assegurar que a base de dados (MySQL) e o Mailpit estão ativos no painel do Herd.*
+*Nota: Se a aplicação for executada através do Laravel Herd, o servidor web e o PHP já são geridos automaticamente. Basta assegurar que a base de dados (MySQL) e o Mailpit estão ativos no painel do Herd (ou Lerd para Linux).*
