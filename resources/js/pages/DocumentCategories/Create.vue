@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Head, useForm, Link } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { PhArrowLeft, PhCheck, PhArrowClockwise } from '@phosphor-icons/vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { PhArrowLeft, PhCheck, PhArrowClockwise } from '@phosphor-icons/vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const breadcrumbs = [
     { title: 'Dashboard', href: '/dashboard' },

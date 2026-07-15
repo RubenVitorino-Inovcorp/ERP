@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\VatRate;
 use App\Traits\Searchable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -115,7 +115,7 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article): RedirectResponse
     {
         $request->validate([
-            'reference' => 'required|string|max:255|unique:articles,reference,' . $article->id,
+            'reference' => 'required|string|max:255|unique:articles,reference,'.$article->id,
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
@@ -163,11 +163,18 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article): RedirectResponse
     {
-        if ($article->photo_path) {
-            Storage::disk('public')->delete($article->photo_path);
+        try {
+            $article->delete();
+            
+            if ($article->photo_path) {
+                Storage::disk('public')->delete($article->photo_path);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == "23000") {
+                return redirect()->route('articles.index')->with('error', 'Não é possível eliminar este artigo pois está associado a propostas ou encomendas.');
+            }
+            return redirect()->route('articles.index')->with('error', 'Ocorreu um erro ao eliminar o artigo.');
         }
-        
-        $article->delete();
 
         return redirect()->route('articles.index')->with('success', 'Artigo eliminado com sucesso.');
     }

@@ -6,220 +6,377 @@
     <style>
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: #1e293b;
-            font-size: 13px;
-            line-height: 1.5;
+            color: #000;
+            font-size: 10px;
+            line-height: 1.3;
             margin: 0;
-            padding: 20px;
+            padding: 20px 30px;
         }
-        .header {
+        
+        table {
             width: 100%;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #1D454C;
-            padding-bottom: 15px;
+            border-collapse: collapse;
         }
-        .header table {
-            width: 100%;
+
+        /* Header */
+        .header-table td {
+            vertical-align: top;
         }
-        .company-name {
-            font-size: 22px;
+        .logo-container {
+            width: 50%;
+        }
+        .logo-container img {
+            max-width: 200px;
+            max-height: 80px;
+        }
+        .company-name-fallback {
+            font-size: 24px;
             font-weight: bold;
-            color: #1D454C;
+            color: #d4a373; /* Example color, should be dynamic or generic */
+            letter-spacing: 2px;
+        }
+        
+        .doc-title-container {
+            width: 50%;
+            text-align: right;
         }
         .doc-title {
-            text-align: right;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
-            color: #1D454C;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .doc-details {
-            text-align: right;
-            font-size: 12px;
-            color: #64748b;
+        .doc-number {
+            font-size: 14px;
+            margin-top: 5px;
         }
-        .details-section {
-            width: 100%;
-            margin-bottom: 30px;
-        }
-        .details-section table {
-            width: 100%;
-        }
-        .box {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 12px;
-        }
-        .box-title {
-            font-weight: bold;
-            color: #1D454C;
+
+        /* Client Section */
+        .client-section {
+            margin-top: 40px;
+            margin-left: 50%;
             font-size: 11px;
+            line-height: 1.4;
+        }
+        .client-name {
+            font-weight: bold;
             text-transform: uppercase;
-            margin-bottom: 6px;
+        }
+
+        /* Meta Table (Cliente Nº, Contribuinte, etc) */
+        .meta-container {
+            margin-top: 40px;
+            width: 100%;
+        }
+        .meta-container table {
+            width: 100%;
+        }
+        .meta-container td {
+            vertical-align: top;
+        }
+        .meta-box {
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            padding: 2px 0;
+            text-align: center;
+        }
+        .meta-box th {
+            font-size: 9px;
+            font-weight: bold;
+            padding-bottom: 3px;
+        }
+        .meta-box td {
+            font-size: 10px;
+        }
+
+        /* Items Section */
+        .items-section {
+            margin-top: 20px;
+        }
+        .items-header {
+            background-color: #e5e7eb;
+            text-align: center;
+            font-weight: bold;
+            padding: 5px;
+            border: 1px solid #d1d5db;
         }
         .items-table {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-top: 5px;
         }
         .items-table th {
-            background-color: #1D454C;
-            color: #ffffff;
             text-align: left;
-            padding: 8px 10px;
-            font-size: 11px;
-            text-transform: uppercase;
+            font-size: 9px;
+            border-bottom: 1px solid #000;
+            padding: 4px 2px;
         }
         .items-table td {
-            padding: 10px;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 4px 2px;
+            vertical-align: top;
         }
-        .text-right {
+        .items-table .text-right {
             text-align: right;
         }
-        .text-center {
+        .items-table .text-center {
             text-align: center;
         }
-        .totals-section {
-            width: 100%;
-            margin-top: 20px;
+        .item-description {
+            padding-left: 20px;
+            color: #374151;
+            font-size: 9px;
+            margin-top: 4px;
+        }
+
+        /* Totals & Conditions */
+        .bottom-section {
+            margin-top: 30px;
+        }
+        .bottom-section td {
+            vertical-align: top;
+        }
+        .conditions-box {
+            width: 50%;
+            padding-right: 20px;
+        }
+        .conditions-title {
+            font-weight: bold;
+            font-size: 11px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 2px;
+            margin-bottom: 5px;
+        }
+        .conditions-text {
+            font-size: 9px;
+            line-height: 1.5;
+        }
+        
+        .totals-box {
+            width: 50%;
         }
         .totals-table {
-            width: 40%;
-            margin-left: auto;
             border-collapse: collapse;
+            width: 100%;
         }
         .totals-table td {
-            padding: 6px 10px;
+            padding: 4px 0;
+            border-bottom: 1px solid #e5e7eb;
         }
-        .totals-table .grand-total {
-            font-size: 15px;
+        .totals-table .amount {
+            text-align: right;
             font-weight: bold;
-            color: #1D454C;
-            border-top: 2px solid #1D454C;
-            border-bottom: 2px solid #1D454C;
         }
-        .footer {
-            margin-top: 50px;
-            padding-top: 15px;
-            border-top: 1px solid #e2e8f0;
-            font-size: 11px;
-            color: #94a3b8;
+        .grand-total td {
+            background-color: #d1d5db;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 4px;
+            border-bottom: none;
+        }
+        .not-invoice {
             text-align: center;
+            margin-top: 10px;
+            font-size: 10px;
+        }
+
+        /* Footer Contacts */
+        .footer {
+            position: fixed;
+            bottom: -10px;
+            width: 100%;
+            font-size: 9px;
+            line-height: 1.4;
+        }
+        .footer-title {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 3px;
+        }
+        .footer-page {
+            text-align: right;
+            position: absolute;
+            bottom: 0;
+            right: 0;
         }
     </style>
 </head>
 <body>
 
+    @php
+        $logoPath = null;
+        if (!empty($company->logo_path)) {
+            $logoPath = storage_path('app/public/' . $company->logo_path);
+        }
+        $logoBase64 = null;
+        if ($logoPath && file_exists($logoPath)) {
+            $mime = mime_content_type($logoPath);
+            $logoBase64 = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($logoPath));
+        }
+        
+        \Carbon\Carbon::setLocale('pt');
+    @endphp
+
     <!-- Header -->
-    <div class="header">
-        <table>
-            <tr>
-                <td style="width: 50%;">
-                    <div class="company-name">{{ $company->name ?? 'InovCorp ERP' }}</div>
-                    <div>{{ $company->address ?? 'Morada da Empresa' }}</div>
-                    <div>{{ $company->zip_code ?? '' }} {{ $company->city ?? '' }}</div>
-                    @if(!empty($company->nif))
-                        <div>NIF: {{ $company->nif }}</div>
-                    @endif
-                </td>
-                <td style="width: 50%;" class="text-right">
-                    <div class="doc-title">Proposta</div>
-                    <div class="doc-details">
-                        <strong>N.º:</strong> {{ $proposal->number }}<br>
-                        <strong>Data:</strong> {{ \Carbon\Carbon::parse($proposal->proposal_date)->format('d/m/Y') }}<br>
-                        <strong>Validade:</strong> {{ \Carbon\Carbon::parse($proposal->validity_date)->format('d/m/Y') }}
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- Details -->
-    <div class="details-section">
-        <table>
-            <tr>
-                <td style="width: 48%; vertical-align: top;">
-                    <div class="box">
-                        <div class="box-title">Cliente</div>
-                        <strong>{{ $proposal->entity->name ?? '-' }}</strong><br>
-                        @if(!empty($proposal->entity->nif))
-                            NIF: {{ $proposal->entity->nif }}<br>
-                        @endif
-                        @if(!empty($proposal->entity->address))
-                            {{ $proposal->entity->address }}<br>
-                            {{ $proposal->entity->zip_code }} {{ $proposal->entity->city }}
-                        @endif
-                    </div>
-                </td>
-                <td style="width: 4%;"></td>
-                <td style="width: 48%; vertical-align: top;">
-                    <div class="box">
-                        <div class="box-title">Condições Gerais</div>
-                        <div><strong>Estado:</strong> {{ ucfirst($proposal->status) }}</div>
-                        <div><strong>Validade da Proposta:</strong> Válida até {{ \Carbon\Carbon::parse($proposal->validity_date)->format('d/m/Y') }}</div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- Tabela de Linhas -->
-    <table class="items-table">
-        <thead>
-            <tr>
-                <th>Ref.</th>
-                <th>Descrição</th>
-                <th class="text-center">Qtd</th>
-                <th class="text-right">Preço Unit.</th>
-                <th class="text-right">IVA</th>
-                <th class="text-right">Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @php $subtotal = 0; $vatTotal = 0; @endphp
-            @foreach($proposal->lines as $line)
-                @php
-                    $lineSubtotal = $line->quantity * $line->unit_price;
-                    $vatRate = $line->vatRate ? (float)$line->vatRate->value : 0;
-                    $lineVat = $lineSubtotal * ($vatRate / 100);
-                    $subtotal += $lineSubtotal;
-                    $vatTotal += $lineVat;
-                @endphp
-                <tr>
-                    <td>{{ $line->article->reference ?? '-' }}</td>
-                    <td>{{ $line->article->name ?? 'Artigo' }}</td>
-                    <td class="text-center">{{ $line->quantity }}</td>
-                    <td class="text-right">{{ number_format($line->unit_price, 2, ',', ' ') }} €</td>
-                    <td class="text-right">{{ $vatRate }}%</td>
-                    <td class="text-right">{{ number_format($lineSubtotal + $lineVat, 2, ',', ' ') }} €</td>
-                </tr>
-            @endforeach
-        </tbody>
+    <table class="header-table">
+        <tr>
+            <td class="logo-container">
+                @if($logoBase64)
+                    <img src="{{ $logoBase64 }}" alt="Logo">
+                @else
+                    <div class="company-name-fallback">{{ $company->name ?? 'EMPRESA' }}</div>
+                @endif
+            </td>
+            <td class="doc-title-container">
+                <div class="doc-title">PROPOSTA</div>
+                <div class="doc-number">{{ $proposal->number }}/{{ \Carbon\Carbon::parse($proposal->proposal_date)->format('Y') }}</div>
+            </td>
+        </tr>
     </table>
 
-    <!-- Totais -->
-    <div class="totals-section">
-        <table class="totals-table">
+    <!-- Client Section -->
+    <div class="client-section">
+        <div class="client-name">{{ $proposal->entity->name ?? 'Nome do Cliente' }}</div>
+        <div>{{ $proposal->entity->address ?? '' }}</div>
+        <div>{{ $proposal->entity->zip_code ?? '' }} {{ $proposal->entity->city ?? '' }}</div>
+    </div>
+
+    <!-- Meta Information -->
+    <div class="meta-container">
+        <table>
             <tr>
-                <td>Subtotal:</td>
-                <td class="text-right">{{ number_format($subtotal, 2, ',', ' ') }} €</td>
-            </tr>
-            <tr>
-                <td>Total IVA:</td>
-                <td class="text-right">{{ number_format($vatTotal, 2, ',', ' ') }} €</td>
-            </tr>
-            <tr class="grand-total">
-                <td><strong>Total:</strong></td>
-                <td class="text-right"><strong>{{ number_format($subtotal + $vatTotal, 2, ',', ' ') }} €</strong></td>
+                <td style="width: 45%;">
+                    <table class="meta-box">
+                        <tr>
+                            <th>Cliente Nº</th>
+                            <th>Contribuinte</th>
+                        </tr>
+                        <tr>
+                            <td>{{ $proposal->entity->number ?? '-' }}</td>
+                            <td>{{ $proposal->entity->nif ?? '-' }}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 10%;"></td>
+                <td style="width: 45%;">
+                    <table class="meta-box">
+                        <tr>
+                            <th>Edição</th>
+                            <th>de</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>{{ \Carbon\Carbon::parse($proposal->proposal_date)->translatedFormat('d M Y') }}</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </table>
     </div>
+
+    <!-- Items -->
+    <div class="items-section">
+        <div class="items-header">ARTIGOS / SERVIÇOS</div>
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Ref | Descrição</th>
+                    <th class="text-center" style="width: 10%;">Qtd</th>
+                    <th class="text-right" style="width: 15%;">Preço Unit.</th>
+                    <th class="text-right" style="width: 10%;">IVA</th>
+                    <th class="text-right" style="width: 15%;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php $subtotal = 0; $vatTotal = 0; @endphp
+                @foreach($proposal->lines as $line)
+                    @php
+                        $lineSubtotal = $line->quantity * $line->unit_price;
+                        $vatRate = $line->vatRate ? (float)$line->vatRate->value : 0;
+                        $lineVat = $lineSubtotal * ($vatRate / 100);
+                        $subtotal += $lineSubtotal;
+                        $vatTotal += $lineVat;
+                    @endphp
+                    <tr>
+                        <td>
+                            <strong>{{ $line->article->reference ?? '-' }} | {{ $line->article->name ?? 'Artigo' }}</strong>
+                        </td>
+                        <td class="text-center">{{ $line->quantity }} Un</td>
+                        <td class="text-right">{{ number_format($line->unit_price, 2, ',', ' ') }} €</td>
+                        <td class="text-right">{{ $vatRate }}%</td>
+                        <td class="text-right">{{ number_format($lineSubtotal, 2, ',', ' ') }} €</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div style="border-top: 1px solid #000; margin-top: 5px;"></div>
+    </div>
+
+    <!-- Bottom Section -->
+    <table class="bottom-section">
+        <tr>
+            <td class="conditions-box">
+                <div class="conditions-title">Termos e Condições</div>
+                <div class="conditions-text">
+                    <strong>Válido até:</strong> {{ \Carbon\Carbon::parse($proposal->validity_date)->format('d/m/Y') }}<br>
+                    <strong>Estado:</strong> {{ ucfirst($proposal->status) }}<br>
+                    <br>
+                    *Valor sem IVA incluído<br>
+                </div>
+            </td>
+            <td class="totals-box">
+                <table class="totals-table">
+                    <tr>
+                        <td>Subtotal</td>
+                        <td class="amount">{{ number_format($subtotal, 2, ',', ' ') }} €</td>
+                    </tr>
+                    <tr>
+                        <td>Desconto Geral</td>
+                        <td class="amount">0,00 €</td>
+                    </tr>
+                    <tr>
+                        <td>Total sem IVA</td>
+                        <td class="amount">{{ number_format($subtotal, 2, ',', ' ') }} €</td>
+                    </tr>
+                    <tr>
+                        <td>IVA</td>
+                        <td class="amount">{{ number_format($vatTotal, 2, ',', ' ') }} €</td>
+                    </tr>
+                    <tr class="grand-total">
+                        <td>Total com IVA</td>
+                        <td class="amount">{{ number_format($subtotal + $vatTotal, 2, ',', ' ') }} €</td>
+                    </tr>
+                </table>
+                <div class="not-invoice">Este documento não serve de fatura</div>
+            </td>
+        </tr>
+    </table>
 
     <!-- Footer -->
     <div class="footer">
-        Esta proposta foi processada por computador e é válida por 30 dias.
+        <div class="footer-title">Contactos</div>
+        <div>{{ $company->name ?? 'InovCorp ERP' }}</div>
+        @if(!empty($company->address))
+            <div>{{ $company->address }}</div>
+        @endif
+        @if(!empty($company->zip_code) || !empty($company->city))
+            <div>{{ $company->zip_code ?? '' }} {{ $company->city ?? '' }}</div>
+        @endif
+        @if(!empty($company->nif))
+            <div>NIF: {{ $company->nif }}</div>
+        @endif
+        
+        <div class="footer-page">
+            <script type="text/php">
+                if (isset($pdf)) {
+                    $text = "Pág {PAGE_NUM} de {PAGE_COUNT}";
+                    $size = 8;
+                    $font = $fontMetrics->getFont("Helvetica");
+                    $width = $fontMetrics->get_text_width($text, $font, $size) / 2;
+                    $x = ($pdf->get_width() - $width) - 30;
+                    $y = $pdf->get_height() - 30;
+                    $pdf->page_text($x, $y, $text, $font, $size);
+                }
+            </script>
+        </div>
     </div>
 
 </body>

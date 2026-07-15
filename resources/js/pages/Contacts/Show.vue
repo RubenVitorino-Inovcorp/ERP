@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
 import {
     PhArrowLeft,
     PhPencilSimple,
@@ -17,6 +13,10 @@ import {
     PhBriefcase,
 } from '@phosphor-icons/vue';
 import { toast } from 'vue-sonner';
+import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     contact: any;
@@ -30,8 +30,13 @@ const breadcrumbs = [
 
 function deleteContact() {
     router.delete((window as any).route('contacts.destroy', props.contact.id), {
-        onSuccess: () => {
-            toast.success('Contacto eliminado com sucesso.');
+        onSuccess: (page) => {
+            const flashError = page.props.flash?.error || (page.props as any).error;
+            if (flashError) {
+                toast.error(flashError);
+            } else {
+                toast.success('Contacto eliminado com sucesso.');
+            }
         },
         onError: () => {
             toast.error('Erro ao eliminar o contacto.');

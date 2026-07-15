@@ -4,17 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCalendarEventRequest;
 use App\Http\Requests\UpdateCalendarEventRequest;
+use App\Models\CalendarAction;
 use App\Models\CalendarEvent;
 use App\Models\CalendarType;
-use App\Models\CalendarAction;
 use App\Models\Entity;
 use App\Models\User;
 use App\Traits\Searchable;
-use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CalendarEventController extends Controller
 {
@@ -40,7 +39,7 @@ class CalendarEventController extends Controller
         $rawEvents = $query->get();
 
         $events = $rawEvents->map(function ($event) {
-            $start = $event->date . 'T' . $event->time;
+            $start = $event->date.'T'.$event->time;
             $end = null;
             if ($event->duration) {
                 $end = Carbon::parse($start)->addMinutes($event->duration)->format('Y-m-d\TH:i:s');
@@ -166,4 +165,3 @@ class CalendarEventController extends Controller
         return redirect()->route('calendar-events.index')->with('success', 'Evento de calendário eliminado com sucesso.');
     }
 }
-

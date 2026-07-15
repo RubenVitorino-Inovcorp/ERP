@@ -18,7 +18,12 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => 'Inovcorp ERP Base',
+            'address' => fake()->streetAddress(),
+            'zip_code' => fake()->numerify('####-###'),
+            'city' => fake()->city(),
+            'nif' => fake()->numerify('5########'),
+            'logo_path' => null,
         ];
     }
 }

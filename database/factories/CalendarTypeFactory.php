@@ -18,7 +18,7 @@ class CalendarTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->unique()->randomElement(['Reunião', 'Intervenção Técnica', 'Visita Comercial', 'Formação']),
         ];
     }
 }

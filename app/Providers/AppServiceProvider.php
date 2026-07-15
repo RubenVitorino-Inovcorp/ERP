@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Auth\CipherSweetEloquentUserProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Auth;
-use App\Auth\CipherSweetEloquentUserProvider;
+use Spatie\Activitylog\Models\Activity;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +25,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Activity::creating(function (Activity $activity) {
+            $activity->properties = $activity->properties->merge([
+                'ip' => Request::ip(),
+                'user_agent' => Request::userAgent(),
+            ]);
+        });
+
         Vite::prefetch(concurrency: 3);
 
         Auth::provider('ciphersweet-eloquent', function ($app, array $config) {
@@ -29,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         if (config('app.env') !== 'local') {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+            URL::forceScheme('https');
         }
     }
 }

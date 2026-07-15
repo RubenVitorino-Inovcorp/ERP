@@ -26,7 +26,7 @@ class PermissionSeeder extends Seeder
             'arquivo_digital',
             'utilizadores',
             'permissoes',
-            'configuracoes'
+            'configuracoes',
         ];
 
         $actions = ['create', 'read', 'update', 'delete'];

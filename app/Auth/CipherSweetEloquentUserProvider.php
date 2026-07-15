@@ -4,6 +4,7 @@ namespace App\Auth;
 
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Support\Arrayable;
 use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
 class CipherSweetEloquentUserProvider extends EloquentUserProvider
@@ -11,8 +12,7 @@ class CipherSweetEloquentUserProvider extends EloquentUserProvider
     /**
      * Retrieve a user by the given credentials.
      *
-     * @param  array  $credentials
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @return Authenticatable|null
      */
     public function retrieveByCredentials(#[\SensitiveParameter] array $credentials)
     {
@@ -33,13 +33,14 @@ class CipherSweetEloquentUserProvider extends EloquentUserProvider
             if ($model instanceof CipherSweetEncrypted) {
                 $encryptedRow = $model::getCipherSweetEncryptedRow();
                 if (in_array($key, $encryptedRow->listEncryptedFields())) {
-                    $indexName = $key . '_index';
+                    $indexName = $key.'_index';
                     $query->whereBlind($key, $indexName, $value);
+
                     continue;
                 }
             }
 
-            if (is_array($value) || $value instanceof \Illuminate\Contracts\Support\Arrayable) {
+            if (is_array($value) || $value instanceof Arrayable) {
                 $query->whereIn($key, $value);
             } else {
                 $query->where($key, $value);

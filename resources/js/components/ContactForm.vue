@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
 import { useForm, Link } from '@inertiajs/vue3';
+import {
+    PhArrowLeft,
+    PhCheck,
+    PhArrowClockwise,
+} from '@phosphor-icons/vue';
+import { ref, computed, watch } from 'vue';
+import { toast } from 'vue-sonner';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
     SelectContent,
@@ -13,12 +18,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    PhArrowLeft,
-    PhCheck,
-    PhArrowClockwise,
-} from '@phosphor-icons/vue';
-import { toast } from 'vue-sonner';
+import { Textarea } from '@/components/ui/textarea';
 
 const props = defineProps<{
     contact?: any;

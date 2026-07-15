@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { h, computed } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { PhPlus, PhDownloadSimple, PhArrowClockwise, PhUploadSimple } from '@phosphor-icons/vue';
+import type { ColumnDef } from '@tanstack/vue-table';
+import { h, computed } from 'vue';
+import { ref } from 'vue';
+import { toast } from 'vue-sonner';
 import DataTable from '@/components/DataTable.vue';
 import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
 import SearchSelect from '@/components/SearchSelect.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
     Dialog,
     DialogContent,
@@ -17,10 +19,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { PhPlus, PhDownloadSimple, PhArrowClockwise, PhUploadSimple } from '@phosphor-icons/vue';
-import { toast } from 'vue-sonner';
-import type { ColumnDef } from '@tanstack/vue-table';
-import { ref } from 'vue';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     digitalFiles: {
@@ -58,8 +59,10 @@ const selectedCategory = ref<{ label: string; value: number } | null>(null);
 
 function onFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
+
     if (target.files && target.files[0]) {
         form.file = target.files[0];
+
         // Preencher automaticamente o nome com o nome do ficheiro (sem extensão) se vazio
         if (!form.name) {
             const fileName = target.files[0].name;
@@ -92,6 +95,7 @@ function deleteFile(id: number) {
         preserveScroll: true,
         onSuccess: (page) => {
             const flashError = page.props.flash?.error || (page.props as any).error;
+
             if (flashError) {
                 toast.error(flashError);
             } else {
@@ -106,10 +110,14 @@ function deleteFile(id: number) {
 
 // Formatar tamanho do ficheiro
 function formatSize(bytes: number): string {
-    if (bytes === 0) return '0 B';
+    if (bytes === 0) {
+return '0 B';
+}
+
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 }
 
@@ -126,6 +134,7 @@ const columns: ColumnDef<any>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const category = row.original.category;
+
             return h('span', {}, category ? category.name : '-');
         },
     },
@@ -136,11 +145,24 @@ const columns: ColumnDef<any>[] = [
         cell: ({ row }) => h('span', { class: 'text-muted-foreground' }, formatSize(row.original.size)),
     },
     {
+        accessorKey: 'fileable_type',
+        header: 'Origem',
+        enableSorting: false,
+        cell: ({ row }) => {
+            const type = row.original.fileable_type;
+            if (type === 'App\\Models\\SupplierInvoice') {
+                return h(Badge, { variant: 'outline', class: 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-800' }, () => 'Faturas Fornecedores');
+            }
+            return h(Badge, { variant: 'outline', class: 'text-muted-foreground' }, () => 'Manual');
+        },
+    },
+    {
         accessorKey: 'created_at',
         header: 'Data',
         enableSorting: true,
         cell: ({ row }) => {
             const date = new Date(row.original.created_at);
+
             return h('span', { class: 'text-muted-foreground' }, date.toLocaleDateString('pt-PT'));
         },
     },
@@ -149,6 +171,7 @@ const columns: ColumnDef<any>[] = [
         header: '',
         cell: ({ row }) => {
             const file = row.original;
+
             return h('div', { class: 'flex items-center justify-end gap-1' }, [
                 h(
                     'a',

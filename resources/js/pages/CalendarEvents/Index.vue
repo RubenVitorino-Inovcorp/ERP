@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
-import AppLayout from '@/layouts/AppLayout.vue'
-import CalendarWidget from '@/components/CalendarWidget.vue'
-import CalendarEventForm from '@/components/CalendarEventForm.vue'
-import { Button } from '@/components/ui/button'
 import { PhPlus } from '@phosphor-icons/vue'
+import { ref, watch } from 'vue'
+import CalendarEventForm from '@/components/CalendarEventForm.vue'
+import CalendarWidget from '@/components/CalendarWidget.vue'
+import { Button } from '@/components/ui/button'
 import {
     Select,
     SelectContent,
@@ -20,6 +19,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from '@/components/ui/sheet'
+import AppLayout from '@/layouts/AppLayout.vue'
 
 const props = defineProps<{
     events: any[]
@@ -63,6 +63,7 @@ function handleDateClick(dateStr: string) {
 function handleEventClick(eventId: number) {
     // Procura o evento nos props originais recebidos do backend
     const event = props.events.find((e: any) => e.id == eventId)
+
     if (event) {
         selectedEvent.value = {
             id: event.id,

@@ -18,9 +18,9 @@ class CompanyController extends Controller
     {
         // Só há uma empresa no sistema
         $company = Company::first();
-        
-        if (!$company) {
-            $company = new Company();
+
+        if (! $company) {
+            $company = new Company;
         }
 
         return Inertia::render('Company/Edit', [
@@ -35,8 +35,8 @@ class CompanyController extends Controller
     {
         $company = Company::first();
 
-        if (!$company) {
-            $company = new Company();
+        if (! $company) {
+            $company = new Company;
         }
 
         $company->name = $request->name;
@@ -51,7 +51,7 @@ class CompanyController extends Controller
             if ($company->logo_path && Storage::disk('public')->exists($company->logo_path)) {
                 Storage::disk('public')->delete($company->logo_path);
             }
-            
+
             $path = $request->file('logo')->store('logos', 'public');
             $company->logo_path = $path;
         }

@@ -7,10 +7,9 @@ use App\Http\Requests\UpdateCalendarTypeRequest;
 use App\Models\CalendarEvent;
 use App\Models\CalendarType;
 use App\Traits\Searchable;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class CalendarTypeController extends Controller
 {
@@ -90,7 +89,7 @@ class CalendarTypeController extends Controller
      */
     public function destroy(CalendarType $calendarType)
     {
-        if(CalendarEvent::where('calendar_type_id', $calendarType->id)->exists()) {
+        if (CalendarEvent::where('calendar_type_id', $calendarType->id)->exists()) {
             return redirect()->route('calendar-types.index')->with('error', 'Não é possível eliminar este tipo de calendário porque está associado a um ou mais eventos.');
         }
 

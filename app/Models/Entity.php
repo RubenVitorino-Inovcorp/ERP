@@ -2,17 +2,27 @@
 
 namespace App\Models;
 
+use Database\Factories\EntityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
-use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
-use ParagonIE\CipherSweet\EncryptedRow;
 use ParagonIE\CipherSweet\BlindIndex;
+use ParagonIE\CipherSweet\EncryptedRow;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
+use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
 class Entity extends Model implements CipherSweetEncrypted
 {
-    /** @use HasFactory<\Database\Factories\EntityFactory> */
-    use HasFactory, UsesCipherSweet;
+    /** @use HasFactory<EntityFactory> */
+    use HasFactory, LogsActivity, UsesCipherSweet;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty();
+    }
 
     protected $fillable = ['type', 'number', 'nif', 'name', 'address', 'zip_code', 'city', 'country_id', 'phone', 'mobile', 'website', 'email', 'gdpr_consent', 'notes', 'status'];
 
@@ -49,5 +59,15 @@ class Entity extends Model implements CipherSweetEncrypted
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function currentAccountEntries()
+    {
+        return $this->hasMany(CurrentAccountEntry::class);
+    }
+
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
     }
 }

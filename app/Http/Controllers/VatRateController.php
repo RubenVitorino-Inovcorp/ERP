@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreVatRateRequest;
 use App\Http\Requests\UpdateVatRateRequest;
-use App\Models\VatRate;
 use App\Models\Article;
+use App\Models\VatRate;
 use App\Traits\Searchable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 
 class VatRateController extends Controller
 {

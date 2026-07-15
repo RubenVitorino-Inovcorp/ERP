@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { h } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { PhPlus } from '@phosphor-icons/vue';
+import type { ColumnDef } from '@tanstack/vue-table';
+import { h } from 'vue';
+import { toast } from 'vue-sonner';
 import DataTable from '@/components/DataTable.vue';
 import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
 import { Button } from '@/components/ui/button';
-import { PhPlus } from '@phosphor-icons/vue';
-import { toast } from 'vue-sonner';
-import type { ColumnDef } from '@tanstack/vue-table';
+import { Badge } from '@/components/ui/badge';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     documentCategories: {
@@ -33,6 +34,7 @@ function deleteCategory(id: number) {
         preserveScroll: true,
         onSuccess: (page) => {
             const flashError = page.props.flash?.error || (page.props as any).error;
+
             if (flashError) {
                 toast.error(flashError);
             } else {
@@ -66,17 +68,11 @@ const columns: ColumnDef<any>[] = [
         header: 'Estado',
         cell: ({ row }) => {
             const isActive = row.original.status;
+
             return h(
-                'span',
-                {
-                    class: [
-                        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-                        isActive
-                            ? 'bg-[var(--sidebar)]/10 text-[var(--sidebar)] dark:bg-[var(--sidebar-primary)]/10 dark:text-[var(--sidebar-primary)]'
-                            : 'bg-muted text-muted-foreground',
-                    ],
-                },
-                isActive ? 'Ativo' : 'Inativo'
+                Badge,
+                { variant: isActive ? 'default' : 'secondary' },
+                () => (isActive ? 'Ativo' : 'Inativo')
             );
         },
     },
@@ -86,6 +82,7 @@ const columns: ColumnDef<any>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const category = row.original;
+
             return h('div', { class: 'flex items-center gap-1' }, [
                 h(
                     Link,

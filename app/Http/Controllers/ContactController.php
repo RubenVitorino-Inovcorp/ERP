@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
-use App\Models\Entity;
 use App\Models\ContactFunction;
+use App\Models\Entity;
 use App\Traits\Searchable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 
 class ContactController extends Controller
 {
@@ -49,7 +49,7 @@ class ContactController extends Controller
     public function create(): Response
     {
         $nextNumber = (Contact::max('number') ?? 0) + 1;
-        $entities = Entity::all()->map(fn($e) => ['id' => $e->id, 'name' => $e->name, 'type' => $e->type, 'nif' => $e->nif]);
+        $entities = Entity::all()->map(fn ($e) => ['id' => $e->id, 'name' => $e->name, 'type' => $e->type, 'nif' => $e->nif]);
         $functions = ContactFunction::all(['id', 'name']);
 
         return Inertia::render('Contacts/Create', [
@@ -111,7 +111,7 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact): Response
     {
-        $entities = Entity::all()->map(fn($e) => ['id' => $e->id, 'name' => $e->name, 'type' => $e->type, 'nif' => $e->nif]);
+        $entities = Entity::all()->map(fn ($e) => ['id' => $e->id, 'name' => $e->name, 'type' => $e->type, 'nif' => $e->nif]);
         $functions = ContactFunction::all(['id', 'name']);
 
         return Inertia::render('Contacts/Edit', [
@@ -160,7 +160,14 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact): RedirectResponse
     {
-        $contact->delete();
+        try {
+            $contact->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == "23000") {
+                return redirect()->route('contacts.index')->with('error', 'Não é possível eliminar este contacto pois tem registos associados.');
+            }
+            return redirect()->route('contacts.index')->with('error', 'Ocorreu um erro ao eliminar o contacto.');
+        }
 
         return redirect()->route('contacts.index')->with('success', 'Contacto eliminado com sucesso.');
     }

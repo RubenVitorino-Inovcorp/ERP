@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { PhArrowLeft, PhFloppyDisk } from '@phosphor-icons/vue';
+import { computed } from 'vue';
+import { toast } from 'vue-sonner';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Checkbox } from '@/components/ui/checkbox';
-import { PhArrowLeft, PhFloppyDisk } from '@phosphor-icons/vue';
-import { toast } from 'vue-sonner';
-import { computed } from 'vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     role: any;
@@ -58,21 +58,18 @@ const permissionsMatrix = computed(() => {
         
         actions.forEach(act => {
             const permName = `${mod}.${act}`;
-            // Verifica se esta permissão existe na DB
-            const exists = props.permissions.some(p => p.name === permName);
-            if (exists) {
-                matrix[mod].actions[act] = permName;
-            }
+            matrix[mod].actions[act] = permName;
         });
     });
     
     return matrix;
 });
 
-function togglePermission(permName: string, checked: boolean) {
-    if (checked) {
+function togglePermission(permName: string, checked: boolean | string) {
+    const isChecked = checked === true || checked === 'indeterminate';
+    if (isChecked) {
         if (!form.permissions.includes(permName)) {
-            form.permissions.push(permName);
+            form.permissions = [...form.permissions, permName];
         }
     } else {
         form.permissions = form.permissions.filter(p => p !== permName);
@@ -82,17 +79,54 @@ function togglePermission(permName: string, checked: boolean) {
 // Verifica se todas as permissões de um módulo estão selecionadas
 function isModuleAllSelected(mod: string) {
     const modActions = Object.values(permissionsMatrix.value[mod].actions) as string[];
-    if (modActions.length === 0) return false;
+
+    if (modActions.length === 0) {
+        return false;
+    }
+
     return modActions.every(permName => form.permissions.includes(permName));
 }
 
 // Selecionar/desselecionar todas as permissões de um módulo
-function toggleModuleAll(mod: string, checked: boolean) {
+function toggleModuleAll(mod: string, checked: boolean | string) {
+    const isChecked = checked === true || checked === 'indeterminate';
     const modActions = Object.values(permissionsMatrix.value[mod].actions) as string[];
     
-    modActions.forEach(permName => {
-        togglePermission(permName, checked);
+    if (isChecked) {
+        const newPerms = new Set(form.permissions);
+        modActions.forEach(p => newPerms.add(p));
+        form.permissions = Array.from(newPerms);
+    } else {
+        form.permissions = form.permissions.filter(p => !modActions.includes(p));
+    }
+}
+
+// Verifica se TODAS as permissões de TODOS os módulos estão selecionadas
+const isAllSelected = computed(() => {
+    const allActions: string[] = [];
+    Object.values(permissionsMatrix.value).forEach((modData: any) => {
+        allActions.push(...Object.values(modData.actions) as string[]);
     });
+    
+    if (allActions.length === 0) return false;
+    return allActions.every(permName => form.permissions.includes(permName));
+});
+
+// Selecionar/desselecionar absolutamente TUDO
+function toggleAll(checked: boolean | string) {
+    const isChecked = checked === true || checked === 'indeterminate';
+    if (isChecked) {
+        const allActions: string[] = [];
+        Object.values(permissionsMatrix.value).forEach((modData: any) => {
+            allActions.push(...Object.values(modData.actions) as string[]);
+        });
+        
+        const newPerms = new Set(form.permissions);
+        allActions.forEach(p => newPerms.add(p));
+        form.permissions = Array.from(newPerms);
+    } else {
+        form.permissions = [];
+    }
 }
 
 function submit() {
@@ -179,7 +213,16 @@ function submit() {
                                 <thead class="bg-muted/50 text-xs text-muted-foreground uppercase">
                                     <tr>
                                         <th class="px-6 py-4 font-medium">Módulo / Menu</th>
-                                        <th class="px-6 py-4 font-medium text-center">Selecionar Tudo</th>
+                                        <th class="px-6 py-4 font-medium text-center">
+                                            <div class="flex flex-col items-center justify-center gap-2">
+                                                <span>Selecionar Tudo</span>
+                                                <Checkbox 
+                                                    :checked="isAllSelected"
+                                                    @update:checked="toggleAll"
+                                                    class="data-[state=checked]:bg-primary"
+                                                />
+                                            </div>
+                                        </th>
                                         <th v-for="action in actions" :key="action" class="px-6 py-4 font-medium text-center">
                                             {{ actionsLabels[action] }}
                                         </th>

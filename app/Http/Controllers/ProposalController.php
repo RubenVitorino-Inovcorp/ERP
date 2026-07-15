@@ -8,7 +8,6 @@ use App\Models\Entity;
 use App\Models\Order;
 use App\Models\OrderLine;
 use App\Models\Proposal;
-use App\Models\ProposalLine;
 use App\Models\VatRate;
 use App\Traits\Searchable;
 use Illuminate\Http\RedirectResponse;
@@ -47,6 +46,7 @@ class ProposalController extends Controller
                 $total += $lineTotal;
             }
             $proposal->total_value = round($total, 2);
+
             return $proposal;
         });
 
@@ -62,7 +62,7 @@ class ProposalController extends Controller
     public function create(): Response
     {
         $nextNumber = (Proposal::max('number') ?? 0) + 1;
-        
+
         $clients = Entity::whereIn('type', ['cliente', 'ambos'])
             ->where('status', true)
             ->get()
@@ -230,7 +230,14 @@ class ProposalController extends Controller
      */
     public function destroy(Proposal $proposal): RedirectResponse
     {
-        $proposal->delete();
+        try {
+            $proposal->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == "23000") {
+                return redirect()->route('proposals.index')->with('error', 'Não é possível eliminar esta proposta pois tem registos associados.');
+            }
+            return redirect()->route('proposals.index')->with('error', 'Ocorreu um erro ao eliminar a proposta.');
+        }
 
         return redirect()->route('proposals.index')->with('success', 'Proposta eliminada com sucesso.');
     }
@@ -247,8 +254,8 @@ class ProposalController extends Controller
             'proposal' => $proposal,
             'company' => $company,
         ])
-        ->name("Proposta_{$proposal->number}.pdf")
-        ->download();
+            ->name("Proposta_{$proposal->number}.pdf")
+            ->download();
     }
 
     /**
@@ -256,7 +263,7 @@ class ProposalController extends Controller
      */
     public function convertToOrder(Proposal $proposal): RedirectResponse
     {
-        DB::transaction(function () use ($proposal) {
+        $order = DB::transaction(function () use ($proposal) {
             $nextOrderNumber = (Order::where('type', 'cliente')->max('number') ?? 0) + 1;
 
             $order = Order::create([
@@ -279,8 +286,10 @@ class ProposalController extends Controller
                     'vat_rate_id' => $line->vat_rate_id,
                 ]);
             }
+
+            return $order;
         });
 
-        return redirect()->route('proposals.index')->with('success', 'Proposta convertida em Encomenda com sucesso.');
+        return redirect()->route('encomendas.edit', $order->id)->with('success', 'Proposta convertida em Encomenda com sucesso.');
     }
 }

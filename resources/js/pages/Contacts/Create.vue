@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3'
-import AppLayout from '@/layouts/AppLayout.vue'
+import { PhArrowLeft, PhFloppyDisk } from '@phosphor-icons/vue'
+import { ref, watch } from 'vue'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
     Select,
@@ -13,16 +20,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form'
-import { PhArrowLeft, PhFloppyDisk } from '@phosphor-icons/vue'
+import { Textarea } from '@/components/ui/textarea'
 
-import { ref, watch } from 'vue'
+import AppLayout from '@/layouts/AppLayout.vue'
 
 const props = defineProps<{
     nextNumber: number

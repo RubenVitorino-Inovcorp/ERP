@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DigitalFile extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'document_category_id',
@@ -13,7 +16,14 @@ class DigitalFile extends Model
         'mime_type',
         'size',
         'uploaded_by',
+        'fileable_id',
+        'fileable_type',
     ];
+
+    public function fileable()
+    {
+        return $this->morphTo();
+    }
 
     public function category()
     {

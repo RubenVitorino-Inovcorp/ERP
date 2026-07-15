@@ -13,12 +13,11 @@ use Illuminate\Support\Carbon;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
-use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
-use ParagonIE\CipherSweet\EncryptedRow;
 use ParagonIE\CipherSweet\BlindIndex;
-
+use ParagonIE\CipherSweet\EncryptedRow;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
 /**
  * @property int $id
  * @property string $name
@@ -32,12 +31,23 @@ use ParagonIE\CipherSweet\BlindIndex;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
+use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
+use Spatie\Permission\Traits\HasRoles;
+
 #[Fillable(['name', 'email', 'password', 'phone', 'status'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable implements PasskeyUser, CipherSweetEncrypted
+class User extends Authenticatable implements CipherSweetEncrypted, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, HasRoles, UsesCipherSweet;
+    use HasFactory, HasRoles, LogsActivity, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, UsesCipherSweet;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontLogIfAttributesChangedOnly(['remember_token', 'password']);
+    }
 
     public static function configureCipherSweet(EncryptedRow $encryptedRow): void
     {
@@ -60,5 +70,10 @@ class User extends Authenticatable implements PasskeyUser, CipherSweetEncrypted
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function workOrders()
+    {
+        return $this->belongsToMany(WorkOrder::class, 'user_work_order');
     }
 }

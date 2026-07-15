@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\OrderLineFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderLine extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderLineFactory> */
+    /** @use HasFactory<OrderLineFactory> */
     use HasFactory;
 
     protected $fillable = ['order_id', 'article_id', 'supplier_id', 'cost_price', 'quantity', 'unit_price', 'vat_rate_id'];

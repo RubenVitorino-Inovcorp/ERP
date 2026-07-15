@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -30,7 +31,7 @@ class StoreUserRequest extends FormRequest
                 'email',
                 'max:255',
                 function ($attribute, $value, $fail) {
-                    if (\App\Models\User::whereBlind('email', 'email_index', $value)->exists()) {
+                    if (User::whereBlind('email', 'email_index', $value)->exists()) {
                         $fail('O email já está em uso.');
                     }
                 },

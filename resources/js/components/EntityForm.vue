@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
 import { useForm, Link } from '@inertiajs/vue3';
+import {
+    PhArrowLeft,
+    PhCheck,
+    PhArrowClockwise,
+    PhMagnifyingGlass,
+} from '@phosphor-icons/vue';
+import axios from 'axios';
+import { ref, watch, computed } from 'vue';
+import { toast } from 'vue-sonner';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
     SelectContent,
@@ -13,14 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    PhArrowLeft,
-    PhCheck,
-    PhArrowClockwise,
-    PhMagnifyingGlass,
-} from '@phosphor-icons/vue';
-import { toast } from 'vue-sonner';
-import axios from 'axios';
+import { Textarea } from '@/components/ui/textarea';
 
 const props = defineProps<{
     entity?: any;
@@ -66,14 +66,18 @@ watch(localStatus, (val) => {
 async function lookupVies() {
     if (!form.nif) {
         toast.warning('Por favor, introduza um NIF para consulta.');
+
         return;
     }
+
     if (!form.country_id) {
         toast.warning('Por favor, selecione um país para a consulta.');
+
         return;
     }
 
     isSearchingVies.value = true;
+
     try {
         const response = await axios.get('/api/vies/lookup', {
             params: {
@@ -85,12 +89,15 @@ async function lookupVies() {
         if (response.data.success) {
             form.name = response.data.name || form.name;
             form.address = response.data.address || form.address;
+
             if (response.data.zip_code) {
                 form.zip_code = response.data.zip_code;
             }
+
             if (response.data.city) {
                 form.city = response.data.city;
             }
+
             toast.success('Dados obtidos e preenchidos com sucesso via VIES.');
         } else {
             toast.error(response.data.message || 'NIF não encontrado no sistema VIES.');
@@ -129,9 +136,11 @@ const nifValue = computed({
     get: () => form.nif,
     set: (val: string) => {
         const selectedCountry = props.countries.find(c => String(c.id) === String(form.country_id));
+
         if (selectedCountry?.code === 'PT') {
             val = val.replace(/\D/g, '').slice(0, 9);
         }
+
         form.nif = val;
     }
 });
@@ -140,16 +149,20 @@ const zipCodeValue = computed({
     get: () => form.zip_code,
     set: (val: string) => {
         const selectedCountry = props.countries.find(c => String(c.id) === String(form.country_id));
+
         if (selectedCountry?.code === 'PT') {
             val = val.replace(/[^\d-]/g, '').replace(/-+/g, '-');
             const digits = val.replace(/\D/g, '');
+
             if (digits.length > 4) {
                 val = digits.slice(0, 4) + '-' + digits.slice(4, 7);
             } else {
                 val = digits;
             }
+
             val = val.slice(0, 8);
         }
+
         form.zip_code = val;
     }
 });

@@ -1,12 +1,5 @@
 <script setup lang="ts">
 import { Head, useForm, Link } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
-import { useDropzone } from 'vue3-dropzone';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'vue-sonner';
 import {
     PhArrowLeft,
     PhCheck,
@@ -15,6 +8,13 @@ import {
     PhImage,
     PhTrash,
 } from '@phosphor-icons/vue';
+import { ref, computed } from 'vue';
+import { toast } from 'vue-sonner';
+import { useDropzone } from 'vue3-dropzone';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 
 const props = defineProps<{
@@ -57,6 +57,7 @@ if (props.company.logo_path) {
 function onDrop(acceptedFiles: File[], rejectReasons: any[]) {
     if (rejectReasons.length > 0) {
         toast.error('Ficheiro rejeitado. Verifique o tipo e tamanho do ficheiro.');
+
         return;
     }
 
@@ -96,11 +97,13 @@ const zipCodeValue = computed({
     set: (val: string) => {
         val = val.replace(/[^\d-]/g, '').replace(/-+/g, '-');
         const digits = val.replace(/\D/g, '');
+
         if (digits.length > 4) {
             val = digits.slice(0, 4) + '-' + digits.slice(4, 7);
         } else {
             val = digits;
         }
+
         form.zip_code = val.slice(0, 8);
     }
 });

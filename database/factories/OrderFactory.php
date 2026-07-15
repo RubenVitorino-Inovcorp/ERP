@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Entity;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +19,12 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'type' => fake()->randomElement(['cliente', 'fornecedor']),
+            'number' => fake()->unique()->numberBetween(1000, 99999),
+            'order_date' => fake()->dateTimeBetween('-1 month', 'now'),
+            'entity_id' => Entity::inRandomOrder()->first()->id ?? Entity::factory(),
+            'proposal_id' => null,
+            'status' => fake()->randomElement(['rascunho', 'fechado']),
         ];
     }
 }

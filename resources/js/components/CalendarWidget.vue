@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import FullCalendar from '@fullcalendar/vue3'
+import ptLocale from '@fullcalendar/core/locales/pt'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
-import ptLocale from '@fullcalendar/core/locales/pt'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import FullCalendar from '@fullcalendar/vue3'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
     events: any[]

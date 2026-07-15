@@ -51,7 +51,10 @@ class RoleController extends Controller
         ]);
 
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+            $permissions = collect($request->permissions)->map(function ($name) {
+                return \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $name]);
+            })->pluck('name');
+            $role->syncPermissions($permissions);
         }
 
         return redirect()->route('roles.index')->with('success', 'Grupo de permissões criado com sucesso.');
@@ -65,7 +68,7 @@ class RoleController extends Controller
     public function edit(Role $role): Response
     {
         $role->load('permissions');
-        
+
         return Inertia::render('Roles/Edit', [
             'role' => $role,
             'permissions' => Permission::all(),
@@ -78,9 +81,12 @@ class RoleController extends Controller
             'name' => $request->name,
             'status' => $request->status ?? true,
         ]);
-        
+
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+            $permissions = collect($request->permissions)->map(function ($name) {
+                return \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $name]);
+            })->pluck('name');
+            $role->syncPermissions($permissions);
         } else {
             $role->syncPermissions([]);
         }

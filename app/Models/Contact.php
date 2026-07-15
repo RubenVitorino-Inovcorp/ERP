@@ -2,17 +2,27 @@
 
 namespace App\Models;
 
+use Database\Factories\ContactFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
-use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
-use ParagonIE\CipherSweet\EncryptedRow;
 use ParagonIE\CipherSweet\BlindIndex;
+use ParagonIE\CipherSweet\EncryptedRow;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
+use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
 class Contact extends Model implements CipherSweetEncrypted
 {
-    /** @use HasFactory<\Database\Factories\ContactFactory> */
-    use HasFactory, UsesCipherSweet;
+    /** @use HasFactory<ContactFactory> */
+    use HasFactory, LogsActivity, UsesCipherSweet;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty();
+    }
 
     protected $fillable = ['number', 'entity_id', 'name', 'last_name', 'contact_function_id', 'phone', 'mobile', 'email', 'gdpr_consent', 'notes', 'status'];
 

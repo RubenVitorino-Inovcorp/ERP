@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCompanyRequest extends FormRequest
@@ -26,38 +25,38 @@ class UpdateCompanyRequest extends FormRequest
                 'required',
                 'string',
                 function ($attribute, $value, $fail) {
-                    if (!self::isValidPtNif($value)) {
+                    if (! self::isValidPtNif($value)) {
                         $fail('O NIF introduzido não é válido.');
                     }
-                }
+                },
             ],
             'logo' => [
                 'nullable',
                 function ($attribute, $value, $fail) {
                     if (request()->hasFile('logo')) {
                         $file = request()->file('logo');
-                        if (!$file->isValid() || !in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'])) {
+                        if (! $file->isValid() || ! in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'])) {
                             $fail('O logotipo deve ser uma imagem válida (jpeg, png, gif, svg, webp).');
                         }
                         if ($file->getSize() > 10240 * 1024) {
                             $fail('O logotipo não pode exceder 10MB.');
                         }
-                    } elseif ($value !== null && !is_string($value)) {
+                    } elseif ($value !== null && ! is_string($value)) {
                         $fail('O logotipo fornecido tem um formato inválido.');
                     }
-                }
+                },
             ],
         ];
     }
 
     private static function isValidPtNif(?string $nif): bool
     {
-        if (!$nif || strlen($nif) !== 9 || !is_numeric($nif)) {
+        if (! $nif || strlen($nif) !== 9 || ! is_numeric($nif)) {
             return false;
         }
 
         $firstChar = $nif[0];
-        if (!in_array($firstChar, ['1', '2', '3', '5', '6', '8', '9'])) {
+        if (! in_array($firstChar, ['1', '2', '3', '5', '6', '8', '9'])) {
             return false;
         }
 

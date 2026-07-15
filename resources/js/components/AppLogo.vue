@@ -12,13 +12,14 @@ const logoUrl = computed(() => company.value?.logo_path ? `/storage/${company.va
 
 <template>
     <div
-        class="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden"
+        class="flex items-center justify-center overflow-hidden"
+        :class="logoUrl ? 'h-8' : 'aspect-square size-8 rounded-md bg-sidebar-primary text-sidebar-primary-foreground'"
     >
         <img
             v-if="logoUrl"
             :src="logoUrl"
             :alt="companyName"
-            class="size-full object-contain"
+            class="h-full w-auto object-contain"
         />
         <AppLogoIcon v-else class="size-5 fill-current text-white" />
     </div>

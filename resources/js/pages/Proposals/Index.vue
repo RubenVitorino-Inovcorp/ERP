@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { h } from 'vue'
 import { Head, Link, router } from '@inertiajs/vue3'
-import AppLayout from '@/layouts/AppLayout.vue'
-import DataTable from '@/components/DataTable.vue'
-import { Button } from '@/components/ui/button'
 import { PhPlus, PhPencilSimple, PhTrash, PhFilePdf, PhArrowRight } from '@phosphor-icons/vue'
 import type { ColumnDef } from '@tanstack/vue-table'
+import { h } from 'vue'
+import DataTable from '@/components/DataTable.vue'
+import DeleteConfirmation from '@/components/DeleteConfirmation.vue'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import AppLayout from '@/layouts/AppLayout.vue'
 import { create as proposalCreate, edit as proposalEdit, destroy as proposalDestroy } from '@/routes/proposals'
 
 const props = defineProps<{
@@ -33,16 +35,14 @@ const breadcrumbs = [
 ]
 
 function deleteProposal(id: number) {
-    if (confirm('Tem a certeza que deseja eliminar esta proposta?')) {
-        router.delete(proposalDestroy({ proposal: id }), {
-            preserveScroll: true,
-        })
-    }
+    router.delete(proposalDestroy(id), {
+        preserveScroll: true,
+    })
 }
 
 function convertToOrder(id: number) {
     if (confirm('Pretende converter esta proposta numa Encomenda de Cliente?')) {
-        router.post(`/propostas/${id}/convert`, {}, {
+        router.post(`/propostas/${id}/convert-to-order`, {}, {
             preserveScroll: true,
         })
     }
@@ -55,6 +55,7 @@ const columns: ColumnDef<any>[] = [
         enableSorting: true,
         cell: ({ row }) => {
             const date = row.getValue('proposal_date') as string
+
             return h('span', date ? new Date(date).toLocaleDateString('pt-PT') : '-')
         },
     },
@@ -72,6 +73,7 @@ const columns: ColumnDef<any>[] = [
         enableSorting: true,
         cell: ({ row }) => {
             const date = row.getValue('validity_date') as string
+
             return h('span', date ? new Date(date).toLocaleDateString('pt-PT') : '-')
         },
     },
@@ -81,6 +83,7 @@ const columns: ColumnDef<any>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const entity = row.original.entity
+
             return h('span', { class: 'font-medium' }, entity ? entity.name : '-')
         },
     },
@@ -90,6 +93,7 @@ const columns: ColumnDef<any>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const val = row.original.total_value || 0
+
             return h('span', { class: 'font-semibold text-foreground' }, `${val.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`)
         },
     },
@@ -102,16 +106,9 @@ const columns: ColumnDef<any>[] = [
             const isClosed = status === 'fechado'
 
             return h(
-                'span',
-                {
-                    class: [
-                        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-                        isClosed
-                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-400'
-                            : 'bg-amber-100 text-amber-800 dark:bg-amber-500/10 dark:text-amber-400',
-                    ],
-                },
-                isClosed ? 'Fechado' : 'Rascunho'
+                Badge,
+                { variant: isClosed ? 'default' : 'secondary' },
+                () => (isClosed ? 'Fechado' : 'Rascunho')
             )
         },
     },
@@ -132,7 +129,7 @@ const columns: ColumnDef<any>[] = [
                         title: 'Descarregar PDF',
                         class: 'text-muted-foreground hover:text-primary transition-colors',
                     },
-                    h(PhFilePdf, { class: 'size-4' })
+                    [h(PhFilePdf, { class: 'size-4' })]
                 ),
                 // Converter em Encomenda
                 h(
@@ -142,28 +139,31 @@ const columns: ColumnDef<any>[] = [
                         title: 'Converter em Encomenda',
                         class: 'text-muted-foreground hover:text-emerald-600 transition-colors',
                     },
-                    h(PhArrowRight, { class: 'size-4' })
+                    [h(PhArrowRight, { class: 'size-4' })]
                 ),
                 // Editar
                 h(
                     Link,
                     {
-                        href: proposalEdit({ proposal: id }),
+                        href: proposalEdit(id),
                         title: 'Editar',
                         class: 'text-muted-foreground hover:text-primary transition-colors',
                     },
                     () => h(PhPencilSimple, { class: 'size-4' })
                 ),
                 // Eliminar
-                h(
-                    'button',
-                    {
-                        onClick: () => deleteProposal(id),
-                        title: 'Eliminar',
-                        class: 'text-muted-foreground hover:text-destructive transition-colors',
-                    },
-                    () => h(PhTrash, { class: 'size-4' })
-                ),
+                h(DeleteConfirmation, {
+                    onConfirm: () => deleteProposal(id),
+                }, {
+                    trigger: () => h(
+                        'button',
+                        {
+                            title: 'Eliminar',
+                            class: 'text-muted-foreground hover:text-destructive transition-colors',
+                        },
+                        [h(PhTrash, { class: 'size-4' })]
+                    )
+                }),
             ])
         },
     },

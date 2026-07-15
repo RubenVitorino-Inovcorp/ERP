@@ -10,8 +10,10 @@ export function toUrl(route: any) {
     if (typeof route === 'function') {
         return typeof route.url === 'function' ? route.url() : route();
     }
+
     if (route && typeof route === 'object' && typeof route.url === 'string') {
         return route.url;
     }
+
     return route;
 }

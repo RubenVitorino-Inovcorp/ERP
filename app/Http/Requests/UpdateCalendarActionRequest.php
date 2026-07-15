@@ -20,7 +20,7 @@ class UpdateCalendarActionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:calendar_actions,name,' . $this->route('calendar_action')?->id],
+            'name' => ['required', 'string', 'max:255', 'unique:calendar_actions,name,'.$this->route('calendar_action')?->id],
         ];
     }
 }

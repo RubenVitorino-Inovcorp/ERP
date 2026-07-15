@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactFunctionRequest;
 use App\Http\Requests\UpdateContactFunctionRequest;
-use App\Models\ContactFunction;
 use App\Models\Contact;
+use App\Models\ContactFunction;
 use App\Traits\Searchable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 
 class ContactFunctionController extends Controller
 {

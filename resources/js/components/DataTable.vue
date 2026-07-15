@@ -1,30 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
-import {
-    FlexRender,
-    getCoreRowModel,
-    useVueTable,
-    type ColumnDef,
-} from '@tanstack/vue-table';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-    TableEmpty,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     PhMagnifyingGlass,
     PhCaretUp,
@@ -36,7 +11,33 @@ import {
     PhFunnel,
     PhX,
 } from '@phosphor-icons/vue';
+import {
+    FlexRender,
+    getCoreRowModel,
+    useVueTable
+    
+} from '@tanstack/vue-table';
+import type {ColumnDef} from '@tanstack/vue-table';
 import { useDebounceFn } from '@vueuse/core';
+import { ref, watch, computed } from 'vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+    TableEmpty,
+} from '@/components/ui/table';
 
 // --- Tipagem do paginador Laravel ---
 export interface PaginatedData<T> {
@@ -89,6 +90,7 @@ function visit(params: Record<string, string | number | undefined>) {
     if (search.value) {
         query.search = search.value;
     }
+
     if (props.filters?.sort) {
         query.sort = props.filters.sort;
         query.direction = props.filters?.direction ?? 'asc';
@@ -176,7 +178,9 @@ const visiblePages = computed(() => {
 
     const pages: (number | '...')[] = [];
 
-    if (last >= 1) pages.push(1);
+    if (last >= 1) {
+pages.push(1);
+}
 
     if (range.length > 0 && range[0] > 2) {
         pages.push('...');
@@ -188,7 +192,9 @@ const visiblePages = computed(() => {
         pages.push('...');
     }
 
-    if (last > 1) pages.push(last);
+    if (last > 1) {
+pages.push(last);
+}
 
     return pages;
 });

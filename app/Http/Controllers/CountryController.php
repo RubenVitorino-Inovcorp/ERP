@@ -14,6 +14,7 @@ use Inertia\Response;
 class CountryController extends Controller
 {
     use Searchable;
+
     /**
      * Display a listing of the resource.
      */
@@ -104,11 +105,18 @@ class CountryController extends Controller
      */
     public function destroy(Country $country): RedirectResponse
     {
-        if (!$country->exists()) {
+        if (! $country->exists()) {
             return redirect()->route('countries.index')->with('error', 'País não encontrado.');
         }
 
-        $country->delete();
+        try {
+            $country->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == "23000") {
+                return redirect()->route('countries.index')->with('error', 'Não é possível eliminar este país pois está associado a outras entidades.');
+            }
+            return redirect()->route('countries.index')->with('error', 'Ocorreu um erro ao eliminar o país.');
+        }
 
         return redirect()->route('countries.index')->with('success', 'País eliminado com sucesso.');
     }

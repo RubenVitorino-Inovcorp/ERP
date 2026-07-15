@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { h } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { PhPlus, PhImage } from '@phosphor-icons/vue';
+import type { ColumnDef } from '@tanstack/vue-table';
+import { h } from 'vue';
+import { toast } from 'vue-sonner';
 import DataTable from '@/components/DataTable.vue';
 import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
 import { Button } from '@/components/ui/button';
-import { PhPlus, PhImage } from '@phosphor-icons/vue';
-import { toast } from 'vue-sonner';
-import type { ColumnDef } from '@tanstack/vue-table';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     articles: {
@@ -31,8 +31,13 @@ const breadcrumbs = [
 function deleteArticle(id: number) {
     router.delete((window as any).route('articles.destroy', id), {
         preserveScroll: true,
-        onSuccess: () => {
-            toast.success('Artigo eliminado com sucesso.');
+        onSuccess: (page) => {
+            const flashError = page.props.flash?.error || (page.props as any).error;
+            if (flashError) {
+                toast.error(flashError);
+            } else {
+                toast.success('Artigo eliminado com sucesso.');
+            }
         },
         onError: () => {
             toast.error('Erro ao eliminar o artigo.');
@@ -47,6 +52,7 @@ const columns: ColumnDef<any>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const path = row.original.photo_path;
+
             if (path) {
                 return h('div', { class: 'flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md border bg-muted' }, [
                     h('img', {
@@ -56,6 +62,7 @@ const columns: ColumnDef<any>[] = [
                     }),
                 ]);
             }
+
             return h('div', { class: 'flex size-10 shrink-0 items-center justify-center rounded-md border bg-muted text-muted-foreground' }, [
                 h(PhImage, { class: 'size-5 opacity-50' }),
             ]);
@@ -68,6 +75,7 @@ const columns: ColumnDef<any>[] = [
         cell: ({ row }) => {
             const article = row.original;
             const wRoute = (window as any).route;
+
             return h(
                 Link,
                 {
@@ -85,6 +93,7 @@ const columns: ColumnDef<any>[] = [
         cell: ({ row }) => {
             const article = row.original;
             const wRoute = (window as any).route;
+
             return h(
                 Link,
                 {
@@ -101,6 +110,7 @@ const columns: ColumnDef<any>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const desc = row.original.description;
+
             return desc ? h('span', { class: 'truncate max-w-[200px] inline-block', title: desc }, desc) : '-';
         },
     },
@@ -125,6 +135,7 @@ const columns: ColumnDef<any>[] = [
         cell: ({ row }) => {
             const article = row.original;
             const wRoute = (window as any).route;
+
             return h('div', { class: 'flex items-center gap-1' }, [
                 h(
                     Link,

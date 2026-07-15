@@ -20,7 +20,7 @@ class UpdateCalendarTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:calendar_types,name,' . $this->route('calendar_type')?->id],
+            'name' => ['required', 'string', 'max:255', 'unique:calendar_types,name,'.$this->route('calendar_type')?->id],
         ];
     }
 }

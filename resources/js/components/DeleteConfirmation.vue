@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PhWarning } from '@phosphor-icons/vue';
 import { ref } from 'vue';
 import {
     AlertDialog,
@@ -12,7 +13,6 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { PhWarning } from '@phosphor-icons/vue';
 
 withDefaults(
     defineProps<{

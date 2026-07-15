@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
 import {
     PhArrowLeft,
     PhPencilSimple,
@@ -16,6 +13,9 @@ import {
     PhShieldCheck,
 } from '@phosphor-icons/vue';
 import { toast } from 'vue-sonner';
+import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 const props = defineProps<{
     entity: any;

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\CalendarEventFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CalendarEvent extends Model
 {
-    /** @use HasFactory<\Database\Factories\CalendarEventFactory> */
+    /** @use HasFactory<CalendarEventFactory> */
     use HasFactory;
 
     protected $fillable = ['date', 'time', 'duration', 'entity_id', 'calendar_type_id', 'calendar_action_id', 'description', 'status'];
@@ -48,5 +49,10 @@ class CalendarEvent extends Model
     public function carbonCopy()
     {
         return $this->users()->wherePivot('role', 'conhecimento');
+    }
+
+    public function workOrder()
+    {
+        return $this->hasOne(WorkOrder::class);
     }
 }

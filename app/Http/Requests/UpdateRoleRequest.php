@@ -14,12 +14,12 @@ class UpdateRoleRequest extends FormRequest
     public function rules(): array
     {
         $roleId = $this->route('role')->id ?? $this->route('permissoe')->id ?? null;
-        
+
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:roles,name,' . $roleId],
+            'name' => ['required', 'string', 'max:255', 'unique:roles,name,'.$roleId],
             'status' => ['boolean'],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['string', 'exists:permissions,name'],
+            'permissions.*' => ['string'],
         ];
     }
 }

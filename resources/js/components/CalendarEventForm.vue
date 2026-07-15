@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3'
 import { computed } from 'vue'
+import { toast } from 'vue-sonner'
+import SearchSelect from '@/components/SearchSelect.vue'
+import type { SelectOption } from '@/components/SearchSelect.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import SearchSelect from '@/components/SearchSelect.vue'
-import type { SelectOption } from '@/components/SearchSelect.vue'
 import {
     Select,
     SelectContent,
@@ -14,7 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { toast } from 'vue-sonner'
+import { Textarea } from '@/components/ui/textarea'
 
 const props = defineProps<{
     event?: any
@@ -50,28 +50,38 @@ const actionOptions = computed<SelectOption[]>(() => props.actions.map(a => ({ l
 // Single selects
 const selectedEntity = computed({
     get: () => entityOptions.value.find(o => o.value == Number(form.entity_id)) || null,
-    set: (val: any) => { form.entity_id = val ? val.value.toString() : '' },
+    set: (val: any) => {
+ form.entity_id = val ? val.value.toString() : '' 
+},
 })
 
 const selectedType = computed({
     get: () => typeOptions.value.find(o => o.value == Number(form.calendar_type_id)) || null,
-    set: (val: any) => { form.calendar_type_id = val ? val.value.toString() : '' },
+    set: (val: any) => {
+ form.calendar_type_id = val ? val.value.toString() : '' 
+},
 })
 
 const selectedAction = computed({
     get: () => actionOptions.value.find(o => o.value == Number(form.calendar_action_id)) || null,
-    set: (val: any) => { form.calendar_action_id = val ? val.value.toString() : '' },
+    set: (val: any) => {
+ form.calendar_action_id = val ? val.value.toString() : '' 
+},
 })
 
 // Multi selects
 const selectedPartilha = computed({
     get: () => userOptions.value.filter(o => form.partilha.includes(o.value)),
-    set: (val: any[]) => { form.partilha = val.map((v: any) => v.value) },
+    set: (val: any[]) => {
+ form.partilha = val.map((v: any) => v.value) 
+},
 })
 
 const selectedConhecimento = computed({
     get: () => userOptions.value.filter(o => form.conhecimento.includes(o.value)),
-    set: (val: any[]) => { form.conhecimento = val.map((v: any) => v.value) },
+    set: (val: any[]) => {
+ form.conhecimento = val.map((v: any) => v.value) 
+},
 })
 
 function submit() {

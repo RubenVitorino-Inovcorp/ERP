@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Http\JsonResponse;
-use App\Models\Country;
 
 class ViesController extends Controller
 {
@@ -49,7 +49,7 @@ class ViesController extends Controller
 
             $data = $response->json();
 
-            if (!($data['isValid'] ?? false)) {
+            if (! ($data['isValid'] ?? false)) {
                 if ($countryCode === 'PT' && self::isValidPtNif($nif)) {
                     return response()->json([
                         'success' => false,
@@ -86,7 +86,7 @@ class ViesController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Erro ao processar consulta VIES: ' . $e->getMessage(),
+                'message' => 'Erro ao processar consulta VIES: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -96,12 +96,12 @@ class ViesController extends Controller
      */
     private static function isValidPtNif(?string $nif): bool
     {
-        if (!$nif || strlen($nif) !== 9 || !is_numeric($nif)) {
+        if (! $nif || strlen($nif) !== 9 || ! is_numeric($nif)) {
             return false;
         }
 
         $firstChar = $nif[0];
-        if (!in_array($firstChar, ['1', '2', '3', '5', '6', '8', '9'])) {
+        if (! in_array($firstChar, ['1', '2', '3', '5', '6', '8', '9'])) {
             return false;
         }
 

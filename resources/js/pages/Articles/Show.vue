@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
 import {
     PhArrowLeft,
     PhPencilSimple,
@@ -14,6 +10,10 @@ import {
     PhPercent,
 } from '@phosphor-icons/vue';
 import { toast } from 'vue-sonner';
+import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     article: any;
@@ -27,8 +27,13 @@ const breadcrumbs = [
 
 function deleteArticle() {
     router.delete((window as any).route('articles.destroy', props.article.id), {
-        onSuccess: () => {
-            toast.success('Artigo eliminado com sucesso.');
+        onSuccess: (page) => {
+            const flashError = page.props.flash?.error || (page.props as any).error;
+            if (flashError) {
+                toast.error(flashError);
+            } else {
+                toast.success('Artigo eliminado com sucesso.');
+            }
         },
         onError: () => {
             toast.error('Erro ao eliminar o artigo.');

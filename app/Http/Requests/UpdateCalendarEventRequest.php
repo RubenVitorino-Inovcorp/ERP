@@ -15,7 +15,7 @@ class UpdateCalendarEventRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -24,8 +24,8 @@ class UpdateCalendarEventRequest extends FormRequest
             'time' => ['required', 'string'],
             'duration' => ['nullable', 'integer', 'min:0'],
             'entity_id' => ['nullable', 'exists:entities,id'],
-            'calendar_type_id' => ['nullable', 'exists:calendar_types,id'],
-            'calendar_action_id' => ['nullable', 'exists:calendar_actions,id'],
+            'calendar_type_id' => ['required', 'exists:calendar_types,id'],
+            'calendar_action_id' => ['required', 'exists:calendar_actions,id'],
             'description' => ['nullable', 'string'],
             'status' => ['required', 'string', 'in:agendado,realizado,cancelado'],
             'partilha' => ['nullable', 'array'],

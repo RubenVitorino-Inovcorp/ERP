@@ -20,7 +20,7 @@ class DocumentCategorySeeder extends Seeder
             'Relatórios',
             'Multimédia',
             'Comprovativos de Pagamento',
-            'Outros'
+            'Outros',
         ];
 
         foreach ($categories as $category) {

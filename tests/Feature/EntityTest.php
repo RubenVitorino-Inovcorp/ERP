@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\User;
-use App\Models\Entity;
 use App\Models\Country;
+use App\Models\Entity;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -37,7 +37,7 @@ test('authenticated users can create a client', function () {
     ]);
 
     $response->assertRedirect(route('clients.index'));
-    
+
     $entity = Entity::where('name', 'Cliente Teste Lda')->first();
     expect($entity)->not->toBeNull();
     expect($entity->email)->toBe('cliente@teste.com');
@@ -71,7 +71,7 @@ test('authenticated users can create a supplier', function () {
     ]);
 
     $response->assertRedirect(route('suppliers.index'));
-    
+
     $entity = Entity::where('name', 'Fornecedor Teste Lda')->first();
     expect($entity)->not->toBeNull();
     expect($entity->email)->toBe('fornecedor@teste.com');
@@ -81,7 +81,7 @@ test('authenticated users can create a supplier', function () {
 test('nif must be unique in entities', function () {
     $user = User::factory()->create();
     $country = Country::create(['name' => 'Portugal', 'code' => 'PT']);
-    
+
     // Criar a primeira entidade
     Entity::create([
         'type' => 'cliente',

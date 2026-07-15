@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { h } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { PhPlus } from '@phosphor-icons/vue';
+import type { ColumnDef } from '@tanstack/vue-table';
+import { h } from 'vue';
+import { toast } from 'vue-sonner';
 import DataTable from '@/components/DataTable.vue';
 import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
 import { Button } from '@/components/ui/button';
-import { PhPlus } from '@phosphor-icons/vue';
-import { toast } from 'vue-sonner';
-import type { ColumnDef } from '@tanstack/vue-table';
+import { Badge } from '@/components/ui/badge';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     suppliers: {
@@ -36,8 +37,13 @@ const breadcrumbs = [
 function deleteSupplier(id: number) {
     router.delete((window as any).route('suppliers.destroy', id), {
         preserveScroll: true,
-        onSuccess: () => {
-            toast.success('Fornecedor eliminado com sucesso.');
+        onSuccess: (page) => {
+            const flashError = page.props.flash?.error || (page.props as any).error;
+            if (flashError) {
+                toast.error(flashError);
+            } else {
+                toast.success('Fornecedor eliminado com sucesso.');
+            }
         },
         onError: () => {
             toast.error('Erro ao eliminar o fornecedor.');
@@ -53,6 +59,7 @@ const columns: ColumnDef<any>[] = [
         cell: ({ row }) => {
             const supplier = row.original;
             const wRoute = (window as any).route;
+
             return h(
                 Link,
                 {
@@ -70,6 +77,7 @@ const columns: ColumnDef<any>[] = [
         cell: ({ row }) => {
             const supplier = row.original;
             const wRoute = (window as any).route;
+
             return h(
                 Link,
                 {
@@ -96,7 +104,11 @@ const columns: ColumnDef<any>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const website = row.getValue('website') as string;
-            if (!website) return '-';
+
+            if (!website) {
+return '-';
+}
+
             return h(
                 'a',
                 {
@@ -122,16 +134,9 @@ const columns: ColumnDef<any>[] = [
             const isActive = status === 1 || status === true || status === 'active';
 
             return h(
-                'span',
-                {
-                    class: [
-                        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-                        isActive
-                            ? 'bg-[var(--sidebar)]/10 text-[var(--sidebar)] dark:bg-[var(--sidebar-primary)]/10 dark:text-[var(--sidebar-primary)]'
-                            : 'bg-muted text-muted-foreground',
-                    ],
-                },
-                isActive ? 'Ativo' : 'Inativo',
+                Badge,
+                { variant: isActive ? 'default' : 'secondary' },
+                () => (isActive ? 'Ativo' : 'Inativo')
             );
         },
     },
@@ -142,6 +147,7 @@ const columns: ColumnDef<any>[] = [
         cell: ({ row }) => {
             const supplier = row.original;
             const wRoute = (window as any).route;
+
             return h('div', { class: 'flex items-center gap-1' }, [
                 h(
                     Link,

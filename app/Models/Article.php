@@ -2,17 +2,26 @@
 
 namespace App\Models;
 
+use Database\Factories\ArticleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
-use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
 use ParagonIE\CipherSweet\EncryptedRow;
-use ParagonIE\CipherSweet\BlindIndex;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
+use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
 class Article extends Model implements CipherSweetEncrypted
 {
-    /** @use HasFactory<\Database\Factories\ArticleFactory> */
-    use HasFactory, UsesCipherSweet;
+    /** @use HasFactory<ArticleFactory> */
+    use HasFactory, LogsActivity, UsesCipherSweet;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty();
+    }
 
     protected $fillable = ['reference', 'name', 'description', 'price', 'vat_rate_id', 'photo_path', 'notes', 'status'];
 

@@ -25,7 +25,7 @@ class UpdateContactFunctionRequest extends FormRequest
         $functionId = is_object($this->route('contact_function')) ? $this->route('contact_function')->id : $this->route('contact_function');
 
         return [
-            'name' => 'required|string|max:255|unique:contact_functions,name,' . $functionId,
+            'name' => 'required|string|max:255|unique:contact_functions,name,'.$functionId,
         ];
     }
 }

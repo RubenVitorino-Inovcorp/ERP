@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\User;
-use App\Models\ContactFunction;
 use App\Models\Contact;
-use App\Models\Entity;
+use App\Models\ContactFunction;
 use App\Models\Country;
+use App\Models\Entity;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -82,7 +82,7 @@ test('authenticated users can delete a contact function', function () {
 test('cannot delete a contact function if it is in use by a contact', function () {
     $user = User::factory()->create();
     $func = ContactFunction::create(['name' => 'Comercial']);
-    
+
     // Criar entidades e país para associar o contacto
     $country = Country::create(['name' => 'Portugal', 'code' => 'PT']);
     $entity = Entity::create([

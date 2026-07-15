@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\CalendarTypeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CalendarType extends Model
 {
-    /** @use HasFactory<\Database\Factories\CalendarTypeFactory> */
+    /** @use HasFactory<CalendarTypeFactory> */
     use HasFactory;
 
     protected $fillable = ['name'];

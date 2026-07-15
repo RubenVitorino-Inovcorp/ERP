@@ -8,10 +8,10 @@ use App\Models\User;
 use App\Traits\Searchable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -48,18 +48,18 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        
+
         $randomPassword = Str::random(12);
         $data['password'] = Hash::make($randomPassword);
-        
+
         $user = User::create($data);
-        
+
         if ($request->has('roles')) {
             $user->syncRoles($request->roles);
         }
-        
+
         // TODO: Enviar email com a password
-        
+
         return redirect()->route('users.index')->with('success', 'Utilizador criado com sucesso. (Password gerada automaticamente)');
     }
 
@@ -71,7 +71,7 @@ class UserController extends Controller
     public function edit(User $user): Response
     {
         $user->load('roles');
-        
+
         return Inertia::render('Users/Edit', [
             'user' => $user,
             'roles' => Role::all(),
@@ -81,7 +81,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $user->update($request->validated());
-        
+
         if ($request->has('roles')) {
             $user->syncRoles($request->roles);
         } else {
@@ -97,7 +97,14 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('error', 'Não podes eliminar a tua própria conta.');
         }
 
-        $user->delete();
+        try {
+            $user->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == "23000") {
+                return redirect()->route('users.index')->with('error', 'Não é possível eliminar este utilizador pois tem registos associados no sistema.');
+            }
+            return redirect()->route('users.index')->with('error', 'Ocorreu um erro ao eliminar o utilizador.');
+        }
 
         return redirect()->route('users.index')->with('success', 'Utilizador eliminado com sucesso.');
     }

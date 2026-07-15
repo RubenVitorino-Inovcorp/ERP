@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\ProposalLineFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ProposalLine extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProposalLineFactory> */
+    /** @use HasFactory<ProposalLineFactory> */
     use HasFactory;
 
     protected $fillable = ['proposal_id', 'article_id', 'supplier_id', 'cost_price', 'quantity', 'unit_price', 'vat_rate_id'];

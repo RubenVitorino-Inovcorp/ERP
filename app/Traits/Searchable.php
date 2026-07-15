@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -30,7 +31,7 @@ trait Searchable
         array $sortableFields = [],
         string $defaultSort = 'id',
         string $defaultDirection = 'desc',
-    ): \Illuminate\Contracts\Pagination\LengthAwarePaginator {
+    ): LengthAwarePaginator {
         $search = $request->input('search');
         $sort = $request->input('sort', $defaultSort);
         $direction = $request->input('direction', $defaultDirection);

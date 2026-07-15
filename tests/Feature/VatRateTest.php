@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Article;
 use App\Models\User;
 use App\Models\VatRate;
-use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -85,7 +85,7 @@ test('authenticated users can delete a vat rate', function () {
 test('cannot delete a vat rate if it is in use by an article', function () {
     $user = User::factory()->create();
     $vatRate = VatRate::create(['name' => 'IVA 23%', 'value' => 23.00]);
-    
+
     // Criar um artigo que usa esta taxa de IVA
     Article::create([
         'reference' => 'ART001',

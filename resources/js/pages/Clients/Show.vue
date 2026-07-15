@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
 import EntityShow from '@/components/EntityShow.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     entity: any;

@@ -72,12 +72,13 @@ class DigitalFileController extends Controller
     {
         $path = Storage::disk('local')->path($digitalFile->file_path);
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             abort(404, 'O ficheiro não foi encontrado no servidor.');
         }
 
         $extension = pathinfo($digitalFile->file_path, PATHINFO_EXTENSION);
-        $downloadName = $digitalFile->name . '.' . $extension;
+        $safeName = str_replace(['/', '\\'], '-', $digitalFile->name);
+        $downloadName = $safeName.'.'.$extension;
 
         return response()->download($path, $downloadName);
     }

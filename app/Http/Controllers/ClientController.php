@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Entity;
 use App\Models\Country;
+use App\Models\Entity;
 use App\Traits\Searchable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 use Spatie\LaravelCipherSweet\Rules\EncryptedUniqueRule;
 
 class ClientController extends Controller
@@ -70,10 +70,10 @@ class ClientController extends Controller
                 new EncryptedUniqueRule(Entity::class, 'nif_index'),
                 function ($attribute, $value, $fail) use ($request) {
                     $country = Country::find($request->country_id);
-                    if ($country && $country->code === 'PT' && !self::isValidPtNif($value)) {
+                    if ($country && $country->code === 'PT' && ! self::isValidPtNif($value)) {
                         $fail('O NIF introduzido não é válido.');
                     }
-                }
+                },
             ],
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -148,10 +148,10 @@ class ClientController extends Controller
                 (new EncryptedUniqueRule(Entity::class, 'nif_index'))->ignore($entity->id),
                 function ($attribute, $value, $fail) use ($request) {
                     $country = Country::find($request->country_id);
-                    if ($country && $country->code === 'PT' && !self::isValidPtNif($value)) {
+                    if ($country && $country->code === 'PT' && ! self::isValidPtNif($value)) {
                         $fail('O NIF introduzido não é válido.');
                     }
-                }
+                },
             ],
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -192,7 +192,14 @@ class ClientController extends Controller
      */
     public function destroy(Entity $entity): RedirectResponse
     {
-        $entity->delete();
+        try {
+            $entity->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == "23000") {
+                return redirect()->route('clients.index')->with('error', 'Não é possível eliminar este cliente pois tem registos associados (propostas, encomendas, etc.).');
+            }
+            return redirect()->route('clients.index')->with('error', 'Ocorreu um erro ao eliminar o cliente.');
+        }
 
         return redirect()->route('clients.index')->with('success', 'Cliente eliminado com sucesso.');
     }
@@ -202,12 +209,12 @@ class ClientController extends Controller
      */
     private static function isValidPtNif(?string $nif): bool
     {
-        if (!$nif || strlen($nif) !== 9 || !is_numeric($nif)) {
+        if (! $nif || strlen($nif) !== 9 || ! is_numeric($nif)) {
             return false;
         }
 
         $firstChar = $nif[0];
-        if (!in_array($firstChar, ['1', '2', '3', '5', '6', '8', '9'])) {
+        if (! in_array($firstChar, ['1', '2', '3', '5', '6', '8', '9'])) {
             return false;
         }
 
@@ -222,4 +229,3 @@ class ClientController extends Controller
         return $checkDigit === intval($nif[8]);
     }
 }
-

@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
-import AppLayout from '@/layouts/AppLayout.vue'
+import { PhArrowLeft, PhFloppyDisk, PhPlus, PhTrash } from '@phosphor-icons/vue'
+import { computed } from 'vue'
 import { Button } from '@/components/ui/button'
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
     Select,
@@ -11,14 +18,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form'
-import { PhArrowLeft, PhFloppyDisk, PhPlus, PhTrash } from '@phosphor-icons/vue'
+import AppLayout from '@/layouts/AppLayout.vue'
 
 const props = defineProps<{
     proposal: {
@@ -84,9 +84,11 @@ function removeLine(index: number) {
 function onArticleChange(index: number, articleIdStr: string) {
     const articleId = Number(articleIdStr)
     const article = props.articles.find(a => a.id === articleId)
+
     if (article) {
         form.lines[index].article_id = articleIdStr
         form.lines[index].unit_price = Number(article.price)
+
         if (article.vat_rate_id) {
             form.lines[index].vat_rate_id = String(article.vat_rate_id)
         }

@@ -27,25 +27,32 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
-import { index as usersIndex } from '@/routes/users';
-import { index as rolesIndex } from '@/routes/roles';
-import { index as clientsIndex } from '@/routes/clients';
-import { index as suppliersIndex } from '@/routes/suppliers';
-import { index as proposalsIndex } from '@/routes/proposals';
-import { index as calendarEventsIndex } from '@/routes/calendar-events';
-import { index as countriesIndex } from '@/routes/countries';
-import { index as contactsIndex } from '@/routes/contacts';
-import { index as contactFunctionsIndex } from '@/routes/contact-functions';
-import { index as calendarTypesIndex } from '@/routes/calendar-types';
-import { index as calendarActionsIndex } from '@/routes/calendar-actions';
 import { index as articlesIndex } from '@/routes/articles';
-import { index as vatRatesIndex } from '@/routes/vat-rates';
+import { index as calendarActionsIndex } from '@/routes/calendar-actions';
+import { index as calendarEventsIndex } from '@/routes/calendar-events';
+import { index as calendarTypesIndex } from '@/routes/calendar-types';
+import { index as clientsIndex } from '@/routes/clients';
+import { edit as companyEdit } from '@/routes/company';
+import { index as contaCorrenteIndex } from '@/routes/conta-corrente';
+import { index as contactFunctionsIndex } from '@/routes/contact-functions';
+import { index as contactsIndex } from '@/routes/contacts';
+import { index as bankAccountsIndex } from '@/routes/contas-bancarias';
+import { index as countriesIndex } from '@/routes/countries';
 import { index as digitalFilesIndex } from '@/routes/digital-files';
 import { index as documentCategoriesIndex } from '@/routes/document-categories';
-import { edit as companyEdit } from '@/routes/company';
+import { index as logsIndex } from '@/routes/logs';
+import { index as ordersIndex } from '@/routes/encomendas';
+import { index as proposalsIndex } from '@/routes/proposals';
+import { index as rolesIndex } from '@/routes/roles';
+import { index as supplierInvoicesIndex } from '@/routes/supplier-invoices';
+import { index as supplierOrdersIndex } from '@/routes/supplier-orders';
+import { index as suppliersIndex } from '@/routes/suppliers';
+import { index as usersIndex } from '@/routes/users';
+import { index as vatRatesIndex } from '@/routes/vat-rates';
+import { index as workOrdersIndex } from '@/routes/work-orders';
 import type { NavItem } from '@/types';
-import { toUrl } from '@/lib/utils';
 
 // Obter a rota de clientes caso ela já tenha sido gerada
 const getRoute = (fn: any) => {
@@ -87,22 +94,22 @@ const mainNavItems: NavItem[] = [
         title: 'Encomendas',
         icon: PhShoppingCart,
         items: [
-            { title: 'Clientes', href: '#' },
-            { title: 'Fornecedores', href: '#' },
+            { title: 'Clientes', href: getRoute(ordersIndex) },
+            { title: 'Fornecedores', href: getRoute(supplierOrdersIndex) },
         ],
     },
     {
         title: 'Ordens de Trabalho',
-        href: '#',
+        href: getRoute(workOrdersIndex),
         icon: PhWrench,
     },
     {
         title: 'Financeiro',
         icon: PhCurrencyEur,
         items: [
-            { title: 'Contas Bancárias', href: '#' },
-            { title: 'Conta Corrente Clientes', href: '#' },
-            { title: 'Faturas Fornecedores', href: '#' },
+            { title: 'Contas Bancárias', href: getRoute(bankAccountsIndex) },
+            { title: 'Conta Corrente Clientes', href: getRoute(contaCorrenteIndex) },
+            { title: 'Faturas Fornecedores', href: getRoute(supplierInvoicesIndex) },
         ],
     },
     {
@@ -129,7 +136,7 @@ const mainNavItems: NavItem[] = [
             { title: 'Artigos', href: getRoute(articlesIndex) },
             { title: 'Financeiro - IVA', href: getRoute(vatRatesIndex) },
             { title: 'Categorias de Documentos', href: getRoute(documentCategoriesIndex) },
-            { title: 'Logs', href: '#' },
+            { title: 'Logs', href: getRoute(logsIndex) },
             { title: 'Empresa', href: getRoute(companyEdit) },
         ],
     },

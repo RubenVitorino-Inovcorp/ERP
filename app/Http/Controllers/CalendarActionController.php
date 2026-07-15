@@ -4,17 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCalendarActionRequest;
 use App\Http\Requests\UpdateCalendarActionRequest;
-use App\Models\CalendarEvent;
 use App\Models\CalendarAction;
+use App\Models\CalendarEvent;
 use App\Traits\Searchable;
-use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CalendarActionController extends Controller
 {
-
     use Searchable;
 
     /**

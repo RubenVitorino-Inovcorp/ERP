@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -31,7 +32,7 @@ class UpdateUserRequest extends FormRequest
                 'max:255',
                 function ($attribute, $value, $fail) {
                     $userId = $this->route('user')->id ?? $this->route('utilizadore')->id; // fallback in case parameter name is different
-                    if (\App\Models\User::whereBlind('email', 'email_index', $value)->where('id', '!=', $userId)->exists()) {
+                    if (User::whereBlind('email', 'email_index', $value)->where('id', '!=', $userId)->exists()) {
                         $fail('O email já está em uso.');
                     }
                 },

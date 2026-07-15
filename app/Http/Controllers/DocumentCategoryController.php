@@ -42,7 +42,7 @@ class DocumentCategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:document_categories,name',
-            'status' => 'boolean'
+            'status' => 'boolean',
         ]);
 
         DocumentCategory::create([
@@ -63,8 +63,8 @@ class DocumentCategoryController extends Controller
     public function update(Request $request, DocumentCategory $documentCategory): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:document_categories,name,' . $documentCategory->id,
-            'status' => 'boolean'
+            'name' => 'required|string|max:255|unique:document_categories,name,'.$documentCategory->id,
+            'status' => 'boolean',
         ]);
 
         $documentCategory->update([

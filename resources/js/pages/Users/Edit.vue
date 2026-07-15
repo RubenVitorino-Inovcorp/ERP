@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import { PhArrowLeft, PhFloppyDisk } from '@phosphor-icons/vue';
-import SearchSelect from '@/components/SearchSelect.vue';
-import type { SelectOption } from '@/components/SearchSelect.vue';
 import { computed } from 'vue';
 import { toast } from 'vue-sonner';
+import SearchSelect from '@/components/SearchSelect.vue';
+import type { SelectOption } from '@/components/SearchSelect.vue';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps<{
     user: any;
@@ -37,7 +37,9 @@ const roleOptions = computed<SelectOption[]>(() =>
 
 const selectedRoles = computed({
     get: () => roleOptions.value.filter(o => form.roles.includes(o.value as number)),
-    set: (val: any[]) => { form.roles = val.map((v: any) => v.value) },
+    set: (val: any[]) => {
+ form.roles = val.map((v: any) => v.value) 
+},
 });
 
 function submit() {
