@@ -37,4 +37,6 @@ agents.md
 /test-*.php
 /test-*.js
 /test.cjs
+/write_*.php
+
 
