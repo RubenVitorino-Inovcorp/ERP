@@ -31,3 +31,10 @@ yarn-error.log
 /.agents
 agents.md
 *.pak
+
+# Test scripts
+/test-*.cjs
+/test-*.php
+/test-*.js
+/test.cjs
+
