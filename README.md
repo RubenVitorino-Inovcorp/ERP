@@ -51,7 +51,7 @@ npm install
 ```bash
 cp .env.example .env
 ```
-*(Não te esqueças de gerar a chave da aplicação com `php artisan key:generate`)*
+*(Não esquecer de gerar a chave da aplicação com `php artisan key:generate`)*
 
 4. Correr as migrações e popular a base de dados:
 ```bash
@@ -67,4 +67,4 @@ npm run dev
 php artisan queue:listen
 ```
 
-*Nota: Se estiveres a correr o ambiente através da stack docker/lerd, lembra-te de prefixar os comandos do artisan com o teu utilitário de containers (ex: `lerd php artisan ...`).*
+*Nota: Se a aplicação for executada através do Laravel Herd, o servidor web e o PHP já são geridos automaticamente. Basta assegurar que a base de dados (MySQL) e o Mailpit estão ativos no painel do Herd.*
