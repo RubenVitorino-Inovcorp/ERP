@@ -3,7 +3,7 @@
 Este é o sistema ERP desenvolvido para a InovCorp. O projeto foi construído para gerir clientes, fornecedores, propostas, encomendas, contas bancárias, arquivo digital e toda a parte financeira e de acessos de forma integrada.
 
 ## Stack
-- Laravel 12
+- Laravel 13
 - Vue 3 + Inertia.js v2
 - TailwindCSS v4
 - Shadcn Vue + Radix Primitives
